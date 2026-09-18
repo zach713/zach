@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Info, Heart, Volume2, VolumeX, Flame } from 'lucide-react';
+import { Play, Info, Heart, Volume2, VolumeX, Flame, Clock } from 'lucide-react';
 import { Movie } from '../types';
 
 interface HeroBannerProps {
@@ -28,6 +28,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         <img
           src={movie.backdropUrl}
           alt={movie.title}
+          referrerPolicy="no-referrer"
           className="w-full h-full object-cover object-center scale-105 transition-all duration-1000 filter brightness-65 contrast-110"
         />
         {/* Subtle Watermark aesthetic like screenshot 1 */}
@@ -64,6 +65,13 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             </div>
             <span className="text-slate-500">•</span>
             <span>{movie.releaseYear}</span>
+            <span className="text-slate-500">•</span>
+            <span className="font-mono text-slate-200">{movie.formattedRuntime || movie.duration}</span>
+            <span className="text-slate-500">•</span>
+            <span className="text-amber-400 font-mono font-medium flex items-center gap-1 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/25">
+              <Clock className="w-3 h-3" />
+              <span>{movie.releaseTime}</span>
+            </span>
             <span className="text-slate-500">•</span>
             <span>{movie.genres.join(' / ') || movie.type}</span>
             <span className="px-1.5 py-0.5 rounded border border-[#f6c700] text-[#f6c700] text-[11px] font-bold tracking-wider">
@@ -139,6 +147,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                       <img
                         src={upNext.posterUrl}
                         alt={upNext.title}
+                        referrerPolicy="no-referrer"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -150,6 +159,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                       <p className="text-[11px] font-semibold text-slate-200 truncate group-hover:text-[#f6c700] transition-colors">
                         {upNext.title}
                       </p>
+                      <div className="text-[10px] text-amber-400 font-mono flex items-center justify-between mt-0.5">
+                        <span className="truncate">{upNext.releaseTime}</span>
+                        <span className="text-slate-400 ml-1 shrink-0">{upNext.formattedRuntime}</span>
+                      </div>
                     </div>
                   </button>
                 );

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   ArrowLeft,
   Play,
@@ -12,8 +12,17 @@ import {
   Search,
   Check,
   RotateCcw,
+  Clock,
+  Calendar,
+  Tv,
+  Lock,
+  Unlock,
+  ExternalLink,
+  ShieldCheck,
 } from 'lucide-react';
-import { Movie } from '../types';
+import { Movie, Episode } from '../types';
+import { formatVideoTime, formatReleaseDate } from '../utils/timeFormat';
+import { EpisodesList } from './EpisodesList';
 
 interface WatchPageProps {
   movie: Movie;
@@ -32,13 +41,81 @@ export const WatchPage: React.FC<WatchPageProps> = ({
   isFavorite,
   onToggleFavorite,
 }) => {
+  const LOCKER_URL = 'https://appcomplete.org/cl/i/e6q64q';
+
+  const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(
+    movie.episodes && movie.episodes.length > 0 ? movie.episodes[0] : null
+  );
+
+  // Real full runtime is ALWAYS preserved for movies and series
+  const totalDurationSeconds = selectedEpisode
+    ? selectedEpisode.runtimeSeconds
+    : (movie.runtimeSeconds || 6420);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(174); // 2h 54m = 174m simulated
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [hoverTime, setHoverTime] = useState<number | null>(null);
+  const [hoverPos, setHoverPos] = useState<number>(0);
+
+  // Intro and Content Locker state
+  const [isPlayingIntro, setIsPlayingIntro] = useState(true);
+  const [showLocker, setShowLocker] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+
   const videoRef = useRef<HTMLVideoElement>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
+
+  const introVideoSrc = movie.introVideoUrl || '/videos/universal_intro_3sec.mp4';
+  const mainVideoSrc = selectedEpisode
+    ? (movie.videoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4')
+    : (movie.videoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4');
+
+  const currentVideoSrc = (!isUnlocked && isPlayingIntro) ? introVideoSrc : mainVideoSrc;
+
+  // Reset elapsed time and selected episode when movie changes
+  useEffect(() => {
+    setElapsedSeconds(0);
+    setIsPlaying(false);
+    setIsPlayingIntro(true);
+    setShowLocker(false);
+    setIsUnlocked(false);
+    if (movie.episodes && movie.episodes.length > 0) {
+      setSelectedEpisode(movie.episodes[0]);
+    } else {
+      setSelectedEpisode(null);
+    }
+  }, [movie.id]);
+
+  // Real-time second-by-second playback clock
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (isPlaying && !showLocker) {
+      interval = setInterval(() => {
+        setElapsedSeconds((prev) => {
+          if (!isUnlocked && isPlayingIntro) {
+            if (prev >= 3) {
+              if (videoRef.current) videoRef.current.pause();
+              setIsPlaying(false);
+              setShowLocker(true);
+              return 3;
+            }
+            return prev + 1;
+          }
+          if (prev >= totalDurationSeconds) {
+            setIsPlaying(false);
+            return totalDurationSeconds;
+          }
+          return prev + 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isPlaying, showLocker, isUnlocked, isPlayingIntro, totalDurationSeconds]);
 
   // More like this recommendations
   const moreLikeThis = allMovies
@@ -50,17 +127,91 @@ export const WatchPage: React.FC<WatchPageProps> = ({
     .slice(0, 5);
 
   const togglePlay = () => {
+    if (showLocker) return;
+
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
         setIsPlaying(false);
       } else {
+        if (!isUnlocked && isPlayingIntro && elapsedSeconds >= 3) {
+          setShowLocker(true);
+          return;
+        }
+        if (elapsedSeconds >= totalDurationSeconds) {
+          setElapsedSeconds(0);
+          videoRef.current.currentTime = 0;
+        }
         videoRef.current.play().catch(() => {});
         setIsPlaying(true);
       }
     } else {
+      if (elapsedSeconds >= totalDurationSeconds) {
+        setElapsedSeconds(0);
+      }
       setIsPlaying(!isPlaying);
     }
+  };
+
+  const handleSeek = (pos: number) => {
+    const clampedPos = Math.max(0, Math.min(1, pos));
+    const targetSeconds = Math.round(clampedPos * totalDurationSeconds);
+
+    if (!isUnlocked && targetSeconds >= 3) {
+      if (videoRef.current) videoRef.current.pause();
+      setIsPlaying(false);
+      setShowLocker(true);
+      return;
+    }
+
+    setElapsedSeconds(targetSeconds);
+
+    if (videoRef.current && videoRef.current.duration) {
+      videoRef.current.currentTime = clampedPos * videoRef.current.duration;
+    }
+  };
+
+  const handleUnlock = () => {
+    setIsUnlocked(true);
+    setShowLocker(false);
+    setIsPlayingIntro(false);
+    setElapsedSeconds(3);
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 3;
+        videoRef.current.play().catch(() => {});
+        setIsPlaying(true);
+      }
+    }, 150);
+  };
+
+  const handleReplayIntro = () => {
+    setShowLocker(false);
+    setIsPlayingIntro(true);
+    setIsUnlocked(false);
+    setElapsedSeconds(0);
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(() => {});
+        setIsPlaying(true);
+      }
+    }, 150);
+  };
+
+  const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!timelineRef.current) return;
+    const rect = timelineRef.current.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    handleSeek(pos);
+  };
+
+  const handleTimelineMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!timelineRef.current) return;
+    const rect = timelineRef.current.getBoundingClientRect();
+    const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    setHoverPos(pos);
+    setHoverTime(Math.round(pos * totalDurationSeconds));
   };
 
   const handleShare = () => {
@@ -74,9 +225,23 @@ export const WatchPage: React.FC<WatchPageProps> = ({
     setTimeout(() => setIsDownloaded(false), 3000);
   };
 
+  const handleSelectEpisode = (ep: Episode) => {
+    setSelectedEpisode(ep);
+    setElapsedSeconds(0);
+    setIsPlaying(true);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
+  const progressPercent = totalDurationSeconds > 0
+    ? (elapsedSeconds / totalDurationSeconds) * 100
+    : 0;
+
   return (
     <div className="min-h-screen bg-[#030d1d] text-slate-100 flex flex-col selection:bg-amber-400 selection:text-black">
-      {/* Top Bar matching screenshot 8 */}
+      {/* Top Bar */}
       <header className="sticky top-0 z-40 bg-[#030d1d]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
@@ -117,32 +282,49 @@ export const WatchPage: React.FC<WatchPageProps> = ({
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full space-y-8">
         {/* Video Player Section */}
-        <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 group">
-          {movie.videoUrl ? (
+        <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 group select-none">
+          {currentVideoSrc ? (
             <video
               ref={videoRef}
-              src={movie.videoUrl}
+              src={currentVideoSrc}
               poster={movie.backdropUrl}
               className="w-full h-full object-cover"
               playsInline
               onTimeUpdate={(e) => {
-                const vid = e.currentTarget;
-                if (vid.duration) {
-                  setCurrentTime((vid.currentTime / vid.duration) * 100);
+                const cur = e.currentTarget.currentTime;
+                if (!isUnlocked && isPlayingIntro) {
+                  const rounded = Math.min(3, Math.floor(cur));
+                  setElapsedSeconds(rounded);
+                  if (cur >= 2.95) {
+                    if (videoRef.current) videoRef.current.pause();
+                    setIsPlaying(false);
+                    setShowLocker(true);
+                  }
+                } else {
+                  setElapsedSeconds(Math.floor(cur));
                 }
               }}
-              onEnded={() => setIsPlaying(false)}
+              onEnded={() => {
+                if (!isUnlocked && isPlayingIntro) {
+                  setIsPlaying(false);
+                  setShowLocker(true);
+                } else {
+                  setIsPlaying(false);
+                  setElapsedSeconds(totalDurationSeconds);
+                }
+              }}
             />
           ) : (
             <img
               src={movie.backdropUrl}
               alt={movie.title}
+              referrerPolicy="no-referrer"
               className="w-full h-full object-cover brightness-75"
             />
           )}
 
-          {/* Central Play Button Overlay (when paused) */}
-          {!isPlaying && (
+          {/* Central Play Button Overlay (when paused & not showing locker) */}
+          {!isPlaying && !showLocker && (
             <button
               id="video-player-center-play"
               onClick={togglePlay}
@@ -155,32 +337,113 @@ export const WatchPage: React.FC<WatchPageProps> = ({
             </button>
           )}
 
-          {/* Custom Player Controls Bar (Bottom Overlay) */}
-          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-4 sm:p-6 opacity-90 group-hover:opacity-100 transition-opacity z-20">
-            {/* Timeline Bar */}
+          {/* Interactive Content Locker Overlay (at 3 seconds) */}
+          {showLocker && (
+            <div className="absolute inset-0 z-30 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/90 backdrop-blur-md">
+              <div className="relative w-full max-w-2xl bg-[#091528] border border-amber-400/30 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[96%]">
+                {/* Locker Iframe Container */}
+                <div className="relative flex-1 min-h-[340px] sm:min-h-[420px] bg-slate-950">
+                  <iframe
+                    src={LOCKER_URL}
+                    title="Verification Locker"
+                    className="w-full h-full min-h-[340px] sm:min-h-[420px] border-0"
+                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                  />
+                </div>
+
+                {/* Locker Footer Actions */}
+                <div className="p-3 sm:p-4 bg-[#0a162b] border-t border-white/10 flex flex-wrap items-center justify-between gap-2.5">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleReplayIntro}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-slate-300 text-xs font-semibold transition-colors cursor-pointer"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Replay Intro (3s)</span>
+                    </button>
+                    <a
+                      href={LOCKER_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-amber-300 text-xs font-semibold transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Open in New Tab</span>
+                      <span className="sm:hidden">New Tab</span>
+                    </a>
+                  </div>
+
+                  <button
+                    id="unlock-full-movie-btn"
+                    onClick={handleUnlock}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-bold text-xs sm:text-sm shadow-lg transition-all transform hover:scale-[1.02] cursor-pointer"
+                  >
+                    <Unlock className="w-4 h-4" />
+                    <span>I've Completed Verification • Unlock Movie</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Episode Title Indicator if series */}
+          {selectedEpisode && (
+            <div className="absolute top-4 left-4 z-20 px-3 py-1.5 rounded-lg bg-black/70 backdrop-blur-md border border-white/15 text-xs text-white flex items-center gap-2">
+              <Tv className="w-3.5 h-3.5 text-[#f6c700]" />
+              <span className="font-semibold text-slate-200">
+                S{selectedEpisode.seasonNumber} E{selectedEpisode.episodeNumber}: {selectedEpisode.title}
+              </span>
+              <span className="text-slate-400">•</span>
+              <span className="text-amber-400 font-mono text-[11px] font-bold">
+                {selectedEpisode.releaseTime}
+              </span>
+            </div>
+          )}
+
+          {/* Custom Player Controls Bar (Bottom Overlay - Matching Screenshot image_2.png) */}
+          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent px-4 sm:px-6 pt-8 pb-4 opacity-95 group-hover:opacity-100 transition-opacity z-20">
+            {/* Timeline Scrubber Bar */}
             <div
-              className="w-full h-1.5 bg-white/20 rounded-full mb-3 cursor-pointer relative overflow-hidden"
-              onClick={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const pos = (e.clientX - rect.left) / rect.width;
-                if (videoRef.current && videoRef.current.duration) {
-                  videoRef.current.currentTime = pos * videoRef.current.duration;
-                  setCurrentTime(pos * 100);
-                }
-              }}
+              ref={timelineRef}
+              className="w-full py-2 cursor-pointer relative group/scrubber"
+              onClick={handleTimelineClick}
+              onMouseMove={handleTimelineMouseMove}
+              onMouseLeave={() => setHoverTime(null)}
             >
-              <div
-                className="h-full bg-[#f6c700] rounded-full transition-all"
-                style={{ width: `${currentTime}%` }}
-              />
+              {/* Background Track */}
+              <div className="w-full h-1.5 bg-white/25 rounded-full relative overflow-visible">
+                {/* Yellow Progress Fill */}
+                <div
+                  className="h-full bg-[#f6c700] rounded-full transition-none"
+                  style={{ width: `${progressPercent}%` }}
+                />
+
+                {/* Yellow Circular Scrubber Playhead Knob (Exact match to image_2.png) */}
+                <div
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#f6c700] shadow-[0_0_8px_rgba(246,199,0,0.8)] border border-white/30 pointer-events-none transition-none"
+                  style={{ left: `${progressPercent}%` }}
+                />
+              </div>
+
+              {/* Hover Time Tooltip */}
+              {hoverTime !== null && (
+                <div
+                  className="absolute -top-7 -translate-x-1/2 px-2 py-0.5 rounded bg-black/90 border border-white/20 text-[11px] font-mono text-[#f6c700] pointer-events-none shadow"
+                  style={{ left: `${hoverPos * 100}%` }}
+                >
+                  {formatVideoTime(hoverTime, totalDurationSeconds)}
+                </div>
+              )}
             </div>
 
-            {/* Controls flex row */}
-            <div className="flex items-center justify-between gap-4">
+            {/* Controls Row (Matching Screenshot image_2.png) */}
+            <div className="flex items-center justify-between gap-4 pt-1">
               <div className="flex items-center gap-3 sm:gap-4">
+                {/* Play / Pause Toggle Button */}
                 <button
+                  id="video-player-toggle-play"
                   onClick={togglePlay}
-                  className="text-white hover:text-[#f6c700] transition-colors cursor-pointer"
+                  className="text-white hover:text-[#f6c700] transition-colors cursor-pointer p-1"
                   title={isPlaying ? 'Pause' : 'Play'}
                 >
                   {isPlaying ? (
@@ -190,49 +453,59 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                   )}
                 </button>
 
+                {/* Replay 10s / Reset */}
                 <button
                   onClick={() => {
-                    if (videoRef.current) {
-                      videoRef.current.currentTime = 0;
+                    const nextSec = Math.max(0, elapsedSeconds - 10);
+                    setElapsedSeconds(nextSec);
+                    if (videoRef.current && videoRef.current.duration) {
+                      videoRef.current.currentTime = (nextSec / totalDurationSeconds) * videoRef.current.duration;
                     }
                   }}
-                  className="text-slate-300 hover:text-white transition-colors cursor-pointer"
-                  title="Replay"
+                  className="text-slate-300 hover:text-white transition-colors cursor-pointer p-1"
+                  title="Rewind 10 seconds"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
 
+                {/* Volume / Mute Button */}
                 <button
                   onClick={() => {
                     if (videoRef.current) {
                       videoRef.current.muted = !isMuted;
-                      setIsMuted(!isMuted);
-                    } else {
-                      setIsMuted(!isMuted);
                     }
+                    setIsMuted(!isMuted);
                   }}
-                  className="text-white hover:text-[#f6c700] transition-colors cursor-pointer"
+                  className="text-white hover:text-[#f6c700] transition-colors cursor-pointer p-1"
                   title={isMuted ? 'Unmute' : 'Mute'}
                 >
                   {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                 </button>
 
-                <span className="text-xs text-slate-300 font-medium">
-                  {movie.duration} • {movie.quality}
-                </span>
+                {/* Real-time Dynamic Playback Clock (e.g. '0:00 / 1:47:00' - Matching image_2.png) */}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs sm:text-sm font-semibold text-white font-mono tracking-wide tabular-nums">
+                    {formatVideoTime(elapsedSeconds, totalDurationSeconds)} / {formatVideoTime(totalDurationSeconds)}
+                  </span>
+                </div>
               </div>
 
               <div className="flex items-center gap-3">
                 <span className="px-2 py-0.5 rounded bg-white/10 text-[11px] font-bold text-slate-200">
                   {movie.language}
                 </span>
+                <span className="px-2 py-0.5 rounded bg-amber-400/20 border border-amber-400/80 text-amber-300 text-[10px] font-black tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{movie.quality === '4K' ? '4K ULTRA HD' : movie.quality}</span>
+                </span>
+
                 <button
                   onClick={() => {
                     if (videoRef.current?.requestFullscreen) {
                       videoRef.current.requestFullscreen().catch(() => {});
                     }
                   }}
-                  className="text-slate-300 hover:text-white cursor-pointer"
+                  className="text-slate-300 hover:text-white cursor-pointer p-1"
                   title="Fullscreen"
                 >
                   <Maximize className="w-4 h-4" />
@@ -242,47 +515,79 @@ export const WatchPage: React.FC<WatchPageProps> = ({
           </div>
         </div>
 
-        {/* Watch Now & Download Action Buttons (Screenshot 9) */}
-        <div className="flex items-center gap-4">
-          <button
-            id="watch-player-play-btn"
-            onClick={togglePlay}
-            className="group px-8 py-3.5 bg-[#f6c700] hover:bg-[#ffd700] active:scale-95 text-slate-950 font-bold text-sm sm:text-base rounded-md flex items-center justify-center gap-2.5 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all cursor-pointer min-w-[160px]"
-          >
-            <Play className="w-4 h-4 fill-slate-950 text-slate-950 group-hover:scale-110 transition-transform" />
-            <span>{isPlaying ? 'Pause Stream' : 'Watch Now'}</span>
-          </button>
+        {/* Watch Now & Download Action Buttons with Exact Real Time Info */}
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <button
+              id="watch-player-play-btn"
+              onClick={togglePlay}
+              className="group px-8 py-3.5 bg-[#f6c700] hover:bg-[#ffd700] active:scale-95 text-slate-950 font-bold text-sm sm:text-base rounded-md flex items-center justify-center gap-2.5 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all cursor-pointer min-w-[160px]"
+            >
+              <Play className="w-4 h-4 fill-slate-950 text-slate-950 group-hover:scale-110 transition-transform" />
+              <span>{isPlaying ? 'Pause Stream' : 'Watch Now'}</span>
+            </button>
 
-          <button
-            id="watch-download-btn"
-            onClick={handleDownload}
-            className="px-8 py-3.5 bg-[#081831] hover:bg-[#112a52] border border-white/15 text-slate-100 font-semibold text-sm sm:text-base rounded-md flex items-center justify-center gap-2 transition-all cursor-pointer min-w-[140px]"
-          >
-            {isDownloaded ? (
-              <>
-                <Check className="w-4 h-4 text-emerald-400" />
-                <span className="text-emerald-400">Ready</span>
-              </>
-            ) : (
-              <>
-                <Download className="w-4 h-4 text-slate-300" />
-                <span>Download</span>
-              </>
+            <button
+              id="watch-download-btn"
+              onClick={handleDownload}
+              className="px-8 py-3.5 bg-[#081831] hover:bg-[#112a52] border border-white/15 text-slate-100 font-semibold text-sm sm:text-base rounded-md flex items-center justify-center gap-2 transition-all cursor-pointer min-w-[140px]"
+            >
+              {isDownloaded ? (
+                <>
+                  <Check className="w-4 h-4 text-emerald-400" />
+                  <span className="text-emerald-400">Ready</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4 text-slate-300" />
+                  <span>Download</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Real Time Release Highlight Pill */}
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#081831] border border-amber-400/20 text-xs sm:text-sm">
+            <Clock className="w-4 h-4 text-[#f6c700]" />
+            <span className="text-slate-300">
+              Specific Release Time:
+            </span>
+            <span className="font-bold text-[#f6c700] font-mono">
+              {movie.releaseTime}
+            </span>
+            {movie.episodeReleaseTime && (
+              <span className="text-slate-400 hidden md:inline border-l border-white/10 pl-3">
+                Schedule: {movie.episodeReleaseTime}
+              </span>
             )}
-          </button>
+          </div>
         </div>
 
-        {/* Details & Sidebar Grid (Matching Screenshot 9) */}
+        {/* Series Episodes & Specific Release Times Section - Recreated matching user screenshot */}
+        {movie.episodes && movie.episodes.length > 0 && (
+          <EpisodesList
+            episodes={movie.episodes}
+            selectedEpisode={selectedEpisode}
+            isPlaying={isPlaying}
+            onSelectEpisode={handleSelectEpisode}
+            onTogglePlay={togglePlay}
+            defaultSeason={movie.id === 'love-island-usa' ? 1 : undefined}
+          />
+        )}
+
+        {/* Details & Sidebar Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-2">
           {/* Movie Poster on Left Column */}
           <div className="lg:col-span-3">
-            <div className="aspect-[2/3] max-w-[240px] rounded-xl overflow-hidden bg-[#081831] border border-white/10 shadow-2xl relative">
+            <div className="aspect-[2/3] max-w-[240px] rounded-xl overflow-hidden bg-gradient-to-b from-[#0e2142] to-[#040e1e] border border-white/15 shadow-2xl relative group">
               <img
                 src={movie.posterUrl}
                 alt={movie.title}
-                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                style={{ imageRendering: '-webkit-optimize-contrast' as React.CSSProperties['imageRendering'] }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent flex items-end p-4">
                 <span className="text-sm font-black text-white uppercase tracking-wider font-['Bebas_Neue',sans-serif]">
                   {movie.title}
                 </span>
@@ -297,16 +602,29 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                 {movie.title}
               </h1>
 
-              {/* Badges: 4K, Rating, Duration */}
-              <div className="flex items-center gap-3 text-sm font-semibold text-slate-300 mb-4">
-                <span className="px-2 py-0.5 rounded bg-[#f6c700] text-slate-950 text-xs font-black tracking-wider">
-                  {movie.quality}
+              {/* Badges: 4K Ultra HD, HDR10+, 60 FPS, Rating, Duration, Exact Release Time */}
+              <div className="flex items-center flex-wrap gap-2.5 text-sm font-semibold text-slate-300 mb-4">
+                <span className="px-2.5 py-0.5 rounded bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 text-xs font-black tracking-wider shadow-sm">
+                  {movie.quality === '4K' ? '4K ULTRA HD' : movie.quality}
                 </span>
-                <div className="flex items-center gap-1 text-[#f6c700]">
+                <span className="px-2 py-0.5 rounded bg-white/10 text-slate-200 text-xs font-bold border border-white/15">
+                  HDR10+
+                </span>
+                <span className="px-2 py-0.5 rounded bg-white/10 text-slate-200 text-xs font-bold border border-white/15">
+                  60 FPS
+                </span>
+                <div className="flex items-center gap-1 text-[#f6c700] ml-1">
                   <span>★</span>
                   <span className="text-white">{movie.rating}</span>
                 </div>
-                <span className="text-slate-400">{movie.duration}</span>
+                <span className="text-slate-400 font-mono">
+                  {selectedEpisode ? `${selectedEpisode.duration} • ` : `${movie.duration} • `}
+                  {formatVideoTime(totalDurationSeconds)}
+                </span>
+                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-mono">
+                  <Clock className="w-3 h-3" />
+                  <span>{movie.releaseTime}</span>
+                </div>
               </div>
 
               {/* Synopsis */}
@@ -349,14 +667,32 @@ export const WatchPage: React.FC<WatchPageProps> = ({
               </button>
             </div>
 
-            {/* Divider and Metadata Table (Matching Screenshot 9) */}
+            {/* Divider and Metadata Table with Specific Real Times */}
             <div className="border-t border-white/10 pt-6">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
                 <div>
                   <span className="text-slate-400 font-bold uppercase tracking-wider block mb-1">
-                    RELEASE
+                    RELEASE DATE
                   </span>
-                  <span className="text-slate-100 font-semibold">{movie.releaseDate}</span>
+                  <span className="text-slate-100 font-semibold">
+                    {formatReleaseDate(movie.releaseDate)}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-bold uppercase tracking-wider block mb-1">
+                    RELEASE TIME
+                  </span>
+                  <span className="text-[#f6c700] font-semibold font-mono">
+                    {movie.releaseTime}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-bold uppercase tracking-wider block mb-1">
+                    REAL RUNTIME
+                  </span>
+                  <span className="text-slate-100 font-semibold font-mono">
+                    {movie.formattedRuntime || movie.duration}
+                  </span>
                 </div>
                 <div>
                   <span className="text-slate-400 font-bold uppercase tracking-wider block mb-1">
@@ -372,6 +708,12 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                 </div>
                 <div>
                   <span className="text-slate-400 font-bold uppercase tracking-wider block mb-1">
+                    QUALITY
+                  </span>
+                  <span className="text-slate-100 font-semibold">{movie.quality} Ultra HD</span>
+                </div>
+                <div className="sm:col-span-2">
+                  <span className="text-slate-400 font-bold uppercase tracking-wider block mb-1">
                     GENRE
                   </span>
                   <span className="text-slate-100 font-semibold">
@@ -382,7 +724,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
             </div>
           </div>
 
-          {/* Right Column: MORE LIKE THIS (Screenshot 9) */}
+          {/* Right Column: MORE LIKE THIS */}
           <div className="lg:col-span-3">
             <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 border-b border-white/10 pb-2 mb-4">
               MORE LIKE THIS
@@ -395,25 +737,30 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                     onSelectMovie(item);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="group flex gap-3 p-2 rounded-lg bg-[#081831]/60 hover:bg-[#0c2448] border border-white/5 hover:border-[#f6c700]/40 transition-all cursor-pointer"
+                  className="flex items-center gap-3 p-2 rounded-lg bg-[#081831]/60 hover:bg-[#112a52] border border-white/5 hover:border-white/15 transition-all cursor-pointer group"
                 >
-                  <div className="w-14 h-20 rounded-md overflow-hidden bg-slate-800 flex-shrink-0">
+                  <div className="w-14 h-20 rounded-md overflow-hidden bg-slate-800 flex-shrink-0 relative">
                     <img
                       src={item.posterUrl}
                       alt={item.title}
+                      referrerPolicy="no-referrer"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                     />
                   </div>
-                  <div className="flex-1 min-w-0 flex flex-col justify-center">
-                    <h4 className="text-sm font-bold text-slate-200 group-hover:text-[#f6c700] truncate transition-colors">
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-bold text-slate-100 truncate group-hover:text-[#f6c700] transition-colors">
                       {item.title}
                     </h4>
                     <p className="text-xs text-slate-400 mt-0.5">
                       {item.releaseYear} • {item.type}
                     </p>
-                    <div className="flex items-center gap-1 text-[11px] font-bold text-[#f6c700] mt-1">
-                      <span>★</span>
-                      <span>{item.rating}</span>
+                    <div className="flex items-center gap-2 mt-1.5 text-[11px]">
+                      <div className="flex items-center gap-1 text-[#f6c700]">
+                        <span>★</span>
+                        <span>{item.rating}</span>
+                      </div>
+                      <span className="text-slate-500">•</span>
+                      <span className="text-slate-300 font-mono">{item.formattedRuntime}</span>
                     </div>
                   </div>
                 </div>

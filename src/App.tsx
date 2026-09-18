@@ -71,6 +71,7 @@ export default function App() {
       MOVIES_DATA.find((m) => m.id === 'spiderman-brand-new-day')!,
       MOVIES_DATA.find((m) => m.id === 'the-odyssey')!,
       MOVIES_DATA.find((m) => m.id === 'coyote-vs-acme')!,
+      MOVIES_DATA.find((m) => m.id === 'drawn-together')!,
       MOVIES_DATA.find((m) => m.id === 'mutiny')!,
       MOVIES_DATA.find((m) => m.id === 'the-runner')!,
       MOVIES_DATA.find((m) => m.id === 'shape-of-my-heart')!,
@@ -288,12 +289,19 @@ export default function App() {
                       <img
                         src={movie.posterUrl}
                         alt={movie.title}
+                        referrerPolicy="no-referrer"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        style={{ imageRendering: '-webkit-optimize-contrast' as React.CSSProperties['imageRendering'] }}
                       />
                       <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#030d1d]/80 border border-white/10 text-[11px] font-bold text-slate-100 flex items-center gap-1">
                         <span className="text-[#f6c700]">★</span>
                         <span>{movie.rating}</span>
                       </div>
+                      {movie.quality === '4K' && (
+                        <div className="absolute top-2.5 right-11 px-1.5 py-0.5 rounded bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 font-black text-[9px] tracking-wider uppercase shadow-md flex items-center">
+                          <span>4K</span>
+                        </div>
+                      )}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();

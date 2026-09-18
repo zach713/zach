@@ -1,6 +1,6 @@
 import React from 'react';
 import { FilterTab, Movie } from '../types';
-import { Heart, Play } from 'lucide-react';
+import { Heart, Play, Clock } from 'lucide-react';
 
 interface TrendingTabsProps {
   activeFilter: FilterTab;
@@ -81,20 +81,29 @@ export const TrendingTabs: React.FC<TrendingTabsProps> = ({
                 className="group cursor-pointer"
                 onClick={() => onSelectMovie(movie)}
               >
-                <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-[#0a1b36] border border-white/10 group-hover:border-[#f6c700]/60 group-hover:shadow-xl group-hover:shadow-amber-500/10 transition-all duration-300">
+                <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-gradient-to-b from-[#0e2142] to-[#040e1e] border border-white/10 group-hover:border-[#f6c700]/70 group-hover:shadow-xl group-hover:shadow-amber-500/20 transition-all duration-300">
                   <img
                     src={movie.posterUrl}
                     alt={movie.title}
                     loading="lazy"
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    style={{ imageRendering: '-webkit-optimize-contrast' as React.CSSProperties['imageRendering'] }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#030d1d] via-transparent to-transparent opacity-40 group-hover:opacity-75 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#030d1d] via-[#030d1d]/20 to-transparent opacity-40 group-hover:opacity-75 transition-opacity" />
 
                   {/* Rating Badge */}
-                  <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#030d1d]/80 backdrop-blur-md border border-white/10 flex items-center gap-1 text-[11px] font-bold text-slate-100 shadow">
+                  <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#030d1d]/85 backdrop-blur-md border border-white/15 flex items-center gap-1 text-[11px] font-bold text-slate-100 shadow">
                     <span className="text-[#f6c700] text-xs">★</span>
                     <span>{movie.rating}</span>
                   </div>
+
+                  {/* 4K UHD Badge */}
+                  {movie.quality === '4K' && (
+                    <div className="absolute top-2.5 right-11 px-1.5 py-0.5 rounded bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 font-black text-[9px] tracking-wider uppercase shadow-md flex items-center gap-0.5">
+                      <span>4K UHD</span>
+                    </div>
+                  )}
 
                   {/* Favorite Heart Button */}
                   <button
@@ -121,12 +130,25 @@ export const TrendingTabs: React.FC<TrendingTabsProps> = ({
                 </div>
 
                 <div className="mt-2.5 px-0.5">
-                  <h3 className="text-sm font-bold text-slate-100 truncate group-hover:text-[#f6c700] transition-colors">
+                  <h3
+                    title={movie.title}
+                    className="text-sm font-bold text-slate-100 truncate group-hover:text-[#f6c700] transition-colors"
+                  >
                     {movie.title}
                   </h3>
-                  <p className="text-xs text-slate-400 font-medium mt-0.5">
-                    {movie.releaseYear} • {movie.type}
-                  </p>
+                  <div className="flex items-center justify-between text-xs text-slate-400 font-medium mt-0.5">
+                    <span className="flex items-center gap-1.5 truncate">
+                      <span>{movie.releaseYear} • {movie.type}</span>
+                      {movie.quality === '4K' && (
+                        <span className="px-1 py-0.2 rounded bg-amber-400/20 text-amber-300 text-[10px] font-bold">4K</span>
+                      )}
+                    </span>
+                    <span className="text-slate-300 font-mono text-[11px] font-semibold flex-shrink-0">{movie.formattedRuntime || movie.duration}</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] text-[#f6c700] font-mono mt-0.5">
+                    <Clock className="w-3 h-3 flex-shrink-0" />
+                    <span className="truncate">{movie.releaseTime}</span>
+                  </div>
                 </div>
               </div>
             );
