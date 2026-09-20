@@ -74,7 +74,7 @@ export const EpisodesList: React.FC<EpisodesListProps> = ({
   return (
     <div
       id="episodes-section"
-      className="bg-[#041024] border border-white/10 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl select-none"
+      className="bg-[#130924] border border-purple-500/20 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl select-none"
     >
       {/* Header matching image.png */}
       <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
@@ -92,7 +92,7 @@ export const EpisodesList: React.FC<EpisodesListProps> = ({
           <button
             id="season-selector-btn"
             onClick={() => setIsSeasonDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0c2244] hover:bg-[#112d58] border border-white/10 hover:border-white/20 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1e0d38] hover:bg-[#2d1454] border border-white/10 hover:border-purple-500/30 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer shadow-sm"
           >
             <span>Season {activeSeason}</span>
             <ChevronDown
@@ -104,7 +104,7 @@ export const EpisodesList: React.FC<EpisodesListProps> = ({
 
           {/* Floating Dropdown Menu */}
           {isSeasonDropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-44 rounded-xl bg-[#081831] border border-white/15 shadow-2xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+            <div className="absolute right-0 top-full mt-2 w-44 rounded-xl bg-[#170b2f] border border-purple-500/30 shadow-2xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
               <div className="px-3 py-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-white/10 mb-1">
                 Select Season
               </div>
@@ -125,14 +125,14 @@ export const EpisodesList: React.FC<EpisodesListProps> = ({
                     }}
                     className={`w-full px-3 py-2 text-left text-xs sm:text-sm font-medium flex items-center justify-between transition-colors cursor-pointer ${
                       isCurrent
-                        ? 'bg-[#f6c700]/15 text-[#f6c700] font-bold'
+                        ? 'bg-purple-500/20 text-purple-300 font-bold'
                         : 'text-slate-200 hover:bg-white/5 hover:text-white'
                     }`}
                   >
                     <span>Season {seasonNum}</span>
                     <div className="flex items-center gap-2">
                       <span className="text-[11px] text-slate-400">{count} eps</span>
-                      {isCurrent && <Check className="w-3.5 h-3.5 text-[#f6c700]" />}
+                      {isCurrent && <Check className="w-3.5 h-3.5 text-purple-400" />}
                     </div>
                   </button>
                 );
@@ -155,8 +155,8 @@ export const EpisodesList: React.FC<EpisodesListProps> = ({
               onClick={() => handleRowClick(ep)}
               className={`pt-2 first:pt-0 group flex items-center justify-between gap-3 sm:gap-4 p-2 sm:p-2.5 rounded-xl transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-[#0f284e]/90 border border-white/15 shadow-inner'
-                  : 'hover:bg-[#0c2244]/60 border border-transparent'
+                  ? 'bg-[#241042]/90 border border-purple-500/30 shadow-inner'
+                  : 'hover:bg-[#1c0c36]/60 border border-transparent'
               }`}
             >
               {/* Left Column: Number Badge, Thumbnail, and Episode Details */}
@@ -165,17 +165,17 @@ export const EpisodesList: React.FC<EpisodesListProps> = ({
                 <div
                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center font-bold text-xs sm:text-sm shrink-0 transition-colors ${
                     isCurrentPlaying
-                      ? 'bg-[#f6c700] text-slate-950 font-black shadow-md shadow-amber-400/20'
+                      ? 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-black shadow-md shadow-purple-600/30'
                       : isSelected
-                      ? 'bg-[#18396b] text-[#f6c700] border border-[#f6c700]/40'
-                      : 'bg-[#0a1b35] text-slate-300 border border-white/5 group-hover:text-white group-hover:bg-[#112a52]'
+                      ? 'bg-[#2d1454] text-purple-300 border border-purple-400/50'
+                      : 'bg-[#180d2e] text-slate-300 border border-white/5 group-hover:text-white group-hover:bg-[#241246]'
                   }`}
                 >
                   {ep.episodeNumber}
                 </div>
 
                 {/* Episode Thumbnail */}
-                <div className="w-24 sm:w-36 h-14 sm:h-20 rounded-lg overflow-hidden shrink-0 bg-[#07152b] relative border border-white/10 group-hover:border-white/20 transition-all">
+                <div className="w-24 sm:w-36 h-14 sm:h-20 rounded-lg overflow-hidden shrink-0 bg-[#0e061c] relative border border-white/10 group-hover:border-white/20 transition-all">
                   <img
                     src={ep.thumbnailUrl || 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80'}
                     alt={ep.title}
@@ -188,9 +188,9 @@ export const EpisodesList: React.FC<EpisodesListProps> = ({
                   {isCurrentPlaying && (
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center">
                       <div className="flex items-end gap-0.5 h-4">
-                        <span className="w-1 bg-[#f6c700] rounded-full animate-bounce [animation-delay:-0.3s] h-full" />
-                        <span className="w-1 bg-[#f6c700] rounded-full animate-bounce [animation-delay:-0.15s] h-3" />
-                        <span className="w-1 bg-[#f6c700] rounded-full animate-bounce h-4" />
+                        <span className="w-1 bg-purple-400 rounded-full animate-bounce [animation-delay:-0.3s] h-full" />
+                        <span className="w-1 bg-purple-400 rounded-full animate-bounce [animation-delay:-0.15s] h-3" />
+                        <span className="w-1 bg-purple-400 rounded-full animate-bounce h-4" />
                       </div>
                     </div>
                   )}
@@ -201,8 +201,8 @@ export const EpisodesList: React.FC<EpisodesListProps> = ({
                   <h4
                     className={`text-sm sm:text-base font-bold truncate transition-colors ${
                       isSelected
-                        ? 'text-[#f6c700]'
-                        : 'text-white group-hover:text-[#f6c700]'
+                        ? 'text-purple-300'
+                        : 'text-white group-hover:text-purple-400'
                     }`}
                   >
                     {ep.title.startsWith('Episode') ? ep.title : `Episode ${ep.episodeNumber}: ${ep.title}`}
@@ -214,8 +214,8 @@ export const EpisodesList: React.FC<EpisodesListProps> = ({
                     {ep.releaseTime && (
                       <>
                         <span className="text-slate-600">•</span>
-                        <div className="flex items-center gap-1 font-mono text-amber-400/90 text-[11px]">
-                          <Clock className="w-3 h-3" />
+                        <div className="flex items-center gap-1 font-mono text-purple-300 text-[11px]">
+                          <Clock className="w-3 h-3 text-purple-400" />
                           <span>{ep.releaseTime}</span>
                         </div>
                       </>
@@ -246,7 +246,7 @@ export const EpisodesList: React.FC<EpisodesListProps> = ({
                 }}
                 className={`p-2 sm:p-2.5 rounded-full transition-all shrink-0 cursor-pointer ${
                   isCurrentPlaying
-                    ? 'text-[#f6c700] bg-amber-400/15'
+                    ? 'text-purple-300 bg-purple-500/20'
                     : 'text-slate-400 group-hover:text-white hover:bg-white/10'
                 }`}
                 title={isCurrentPlaying ? 'Pause' : 'Play Episode'}

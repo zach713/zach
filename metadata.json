@@ -1,5 +1,5 @@
 {
-  "name": "FYPFLIX",
+  "name": "Reelora",
   "description": "Stream movies and series in HD, free. Browse trending titles, new releases, binge-worthy series, and watch instantly.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

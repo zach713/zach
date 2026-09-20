@@ -27,8 +27,8 @@ export const BrowseByGenre: React.FC<BrowseByGenreProps> = ({
           onClick={() => onSelectGenre(null)}
           className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer border ${
             selectedGenre === null
-              ? 'bg-[#f6c700] text-slate-950 border-[#f6c700] shadow-md shadow-amber-500/20'
-              : 'bg-[#081831] hover:bg-[#10274c] text-slate-300 border-white/10 hover:border-white/20'
+              ? 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white border-purple-500 shadow-md shadow-purple-600/25'
+              : 'bg-[#160b2b] hover:bg-[#251246] text-purple-200/80 border-white/10 hover:border-purple-500/30'
           }`}
         >
           All Genres
@@ -43,8 +43,8 @@ export const BrowseByGenre: React.FC<BrowseByGenreProps> = ({
               onClick={() => onSelectGenre(isSelected ? null : genre)}
               className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer border ${
                 isSelected
-                  ? 'bg-[#f6c700] text-slate-950 border-[#f6c700] shadow-md shadow-amber-500/20'
-                  : 'bg-[#081831] hover:bg-[#10274c] text-slate-300 border-white/10 hover:border-white/20'
+                  ? 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white border-purple-500 shadow-md shadow-purple-600/25'
+                  : 'bg-[#160b2b] hover:bg-[#251246] text-purple-200/80 border-white/10 hover:border-purple-500/30'
               }`}
             >
               {genre}

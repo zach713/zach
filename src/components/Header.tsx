@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#030d1d]/90 backdrop-blur-md border-b border-white/5 transition-all">
+    <header className="sticky top-0 z-40 w-full bg-[#0c0617]/90 backdrop-blur-md border-b border-white/5 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
         {/* Left: Brand Logo */}
         <div className="flex items-center gap-8">
@@ -38,11 +38,11 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={onOpenHome}
             className="group flex items-center gap-2.5 focus:outline-none cursor-pointer"
           >
-            <div className="w-9 h-9 rounded-full bg-[#f6c700] flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
-              <Play className="w-5 h-5 text-slate-950 fill-slate-950 ml-0.5" />
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-600 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-purple-600/30 group-hover:scale-105 transition-transform">
+              <Play className="w-5 h-5 text-white fill-white ml-0.5" />
             </div>
             <span className="font-extrabold text-2xl tracking-wider text-white font-['Bebas_Neue',sans-serif] text-[28px] leading-none pt-1">
-              FYPFLIX
+              REELORA
             </span>
           </button>
 
@@ -58,17 +58,17 @@ export const Header: React.FC<HeaderProps> = ({
                     onSelectTab(item.label);
                   }}
                   className={`text-sm font-semibold tracking-wide transition-colors relative py-1 cursor-pointer flex items-center gap-1.5 ${
-                    isActive ? 'text-[#f6c700]' : 'text-slate-300 hover:text-white'
+                    isActive ? 'text-purple-400' : 'text-slate-300 hover:text-white'
                   }`}
                 >
                   {item.label}
                   {item.badge !== undefined && item.badge > 0 && (
-                    <span className="text-[10px] bg-[#f6c700] text-black font-bold px-1.5 py-0.2 rounded-full min-w-[16px] text-center">
+                    <span className="text-[10px] bg-purple-600 text-white font-bold px-1.5 py-0.2 rounded-full min-w-[16px] text-center">
                       {item.badge}
                     </span>
                   )}
                   {isActive && (
-                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#f6c700] rounded-full" />
+                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-purple-500 rounded-full" />
                   )}
                 </button>
               );
@@ -86,7 +86,7 @@ export const Header: React.FC<HeaderProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search movies, series..."
-              className="w-full bg-[#0d1e38] text-sm text-slate-100 placeholder-slate-400 pl-10 pr-9 py-2 rounded-full border border-white/10 focus:outline-none focus:border-[#f6c700] focus:ring-1 focus:ring-[#f6c700] transition-all"
+              className="w-full bg-[#180d2f] text-sm text-slate-100 placeholder-slate-400 pl-10 pr-9 py-2 rounded-full border border-white/10 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
             />
             {searchQuery && (
               <button
@@ -113,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#05142b] border-b border-white/10 px-4 py-3 space-y-2">
+        <div className="md:hidden bg-[#120824] border-b border-white/10 px-4 py-3 space-y-2">
           {navItems.map((item) => (
             <button
               key={item.label}
@@ -123,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               className={`w-full text-left py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-between ${
                 activeTab === item.label
-                  ? 'bg-[#f6c700] text-slate-950 font-bold'
+                  ? 'bg-purple-600 text-white font-bold'
                   : 'text-slate-200 hover:bg-white/5'
               }`}
             >

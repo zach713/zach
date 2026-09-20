@@ -240,9 +240,9 @@ export const WatchPage: React.FC<WatchPageProps> = ({
     : 0;
 
   return (
-    <div className="min-h-screen bg-[#030d1d] text-slate-100 flex flex-col selection:bg-amber-400 selection:text-black">
+    <div className="min-h-screen bg-[#0c0617] text-slate-100 flex flex-col selection:bg-purple-600 selection:text-white">
       {/* Top Bar */}
-      <header className="sticky top-0 z-40 bg-[#030d1d]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-[#0c0617]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
             id="watch-back-button"
@@ -255,16 +255,16 @@ export const WatchPage: React.FC<WatchPageProps> = ({
 
           <div className="h-5 w-[1px] bg-white/20" />
 
-          {/* FYPFLIX Logo */}
+          {/* Reelora Logo */}
           <button
             onClick={onBack}
             className="flex items-center gap-2 group cursor-pointer focus:outline-none"
           >
-            <div className="w-7 h-7 rounded-full bg-[#f6c700] flex items-center justify-center">
-              <Play className="w-3.5 h-3.5 text-slate-950 fill-slate-950 ml-0.5" />
+            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-600 to-fuchsia-500 flex items-center justify-center shadow-md shadow-purple-600/30">
+              <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
             </div>
             <span className="font-extrabold text-2xl tracking-wider text-white font-['Bebas_Neue',sans-serif] leading-none pt-0.5">
-              FYPFLIX
+              REELORA
             </span>
           </button>
         </div>
@@ -272,7 +272,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
         {/* Browse Button on right */}
         <button
           onClick={onBack}
-          className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#081831] hover:bg-[#122b52] border border-white/10 text-xs sm:text-sm font-semibold text-slate-200 transition-all cursor-pointer"
+          className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#180d2f] hover:bg-[#28134d] border border-white/10 text-xs sm:text-sm font-semibold text-slate-200 transition-all cursor-pointer"
         >
           <Search className="w-3.5 h-3.5 text-slate-400" />
           <span>Browse</span>
@@ -331,8 +331,8 @@ export const WatchPage: React.FC<WatchPageProps> = ({
               className="absolute inset-0 m-auto w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/25 flex items-center justify-center text-white transition-all transform hover:scale-110 shadow-2xl cursor-pointer z-20 group/btn"
               aria-label="Play Video"
             >
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/20 flex items-center justify-center group-hover/btn:bg-[#f6c700] transition-colors">
-                <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-white text-white group-hover/btn:fill-slate-950 group-hover/btn:text-slate-950 ml-1 transition-colors" />
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/20 flex items-center justify-center group-hover/btn:bg-gradient-to-r group-hover/btn:from-purple-600 group-hover/btn:to-fuchsia-600 transition-colors">
+                <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-white text-white ml-1 transition-colors" />
               </div>
             </button>
           )}
@@ -340,7 +340,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
           {/* Interactive Content Locker Overlay (at 3 seconds) */}
           {showLocker && (
             <div className="absolute inset-0 z-30 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/90 backdrop-blur-md">
-              <div className="relative w-full max-w-2xl bg-[#091528] border border-amber-400/30 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[96%]">
+              <div className="relative w-full max-w-2xl bg-[#130924] border border-purple-500/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[96%]">
                 {/* Locker Iframe Container */}
                 <div className="relative flex-1 min-h-[340px] sm:min-h-[420px] bg-slate-950">
                   <iframe
@@ -352,7 +352,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                 </div>
 
                 {/* Locker Footer Actions */}
-                <div className="p-3 sm:p-4 bg-[#0a162b] border-t border-white/10 flex flex-wrap items-center justify-between gap-2.5">
+                <div className="p-3 sm:p-4 bg-[#160b2b] border-t border-white/10 flex flex-wrap items-center justify-between gap-2.5">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleReplayIntro}
@@ -365,7 +365,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                       href={LOCKER_URL}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-amber-300 text-xs font-semibold transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-purple-300 text-xs font-semibold transition-colors"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       <span className="hidden sm:inline">Open in New Tab</span>
@@ -376,7 +376,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                   <button
                     id="unlock-full-movie-btn"
                     onClick={handleUnlock}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-bold text-xs sm:text-sm shadow-lg transition-all transform hover:scale-[1.02] cursor-pointer"
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-purple-600/30 transition-all transform hover:scale-[1.02] cursor-pointer"
                   >
                     <Unlock className="w-4 h-4" />
                     <span>I've Completed Verification • Unlock Movie</span>
@@ -389,12 +389,12 @@ export const WatchPage: React.FC<WatchPageProps> = ({
           {/* Episode Title Indicator if series */}
           {selectedEpisode && (
             <div className="absolute top-4 left-4 z-20 px-3 py-1.5 rounded-lg bg-black/70 backdrop-blur-md border border-white/15 text-xs text-white flex items-center gap-2">
-              <Tv className="w-3.5 h-3.5 text-[#f6c700]" />
+              <Tv className="w-3.5 h-3.5 text-purple-400" />
               <span className="font-semibold text-slate-200">
                 S{selectedEpisode.seasonNumber} E{selectedEpisode.episodeNumber}: {selectedEpisode.title}
               </span>
               <span className="text-slate-400">•</span>
-              <span className="text-amber-400 font-mono text-[11px] font-bold">
+              <span className="text-purple-300 font-mono text-[11px] font-bold">
                 {selectedEpisode.releaseTime}
               </span>
             </div>
@@ -412,15 +412,15 @@ export const WatchPage: React.FC<WatchPageProps> = ({
             >
               {/* Background Track */}
               <div className="w-full h-1.5 bg-white/25 rounded-full relative overflow-visible">
-                {/* Yellow Progress Fill */}
+                {/* Purple Progress Fill */}
                 <div
-                  className="h-full bg-[#f6c700] rounded-full transition-none"
+                  className="h-full bg-gradient-to-r from-purple-600 to-fuchsia-500 rounded-full transition-none"
                   style={{ width: `${progressPercent}%` }}
                 />
 
-                {/* Yellow Circular Scrubber Playhead Knob (Exact match to image_2.png) */}
+                {/* Purple Circular Scrubber Playhead Knob */}
                 <div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#f6c700] shadow-[0_0_8px_rgba(246,199,0,0.8)] border border-white/30 pointer-events-none transition-none"
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.9)] border border-white/30 pointer-events-none transition-none"
                   style={{ left: `${progressPercent}%` }}
                 />
               </div>
@@ -428,7 +428,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
               {/* Hover Time Tooltip */}
               {hoverTime !== null && (
                 <div
-                  className="absolute -top-7 -translate-x-1/2 px-2 py-0.5 rounded bg-black/90 border border-white/20 text-[11px] font-mono text-[#f6c700] pointer-events-none shadow"
+                  className="absolute -top-7 -translate-x-1/2 px-2 py-0.5 rounded bg-black/90 border border-white/20 text-[11px] font-mono text-purple-300 pointer-events-none shadow"
                   style={{ left: `${hoverPos * 100}%` }}
                 >
                   {formatVideoTime(hoverTime, totalDurationSeconds)}
@@ -443,7 +443,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                 <button
                   id="video-player-toggle-play"
                   onClick={togglePlay}
-                  className="text-white hover:text-[#f6c700] transition-colors cursor-pointer p-1"
+                  className="text-white hover:text-purple-400 transition-colors cursor-pointer p-1"
                   title={isPlaying ? 'Pause' : 'Play'}
                 >
                   {isPlaying ? (
@@ -476,7 +476,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                     }
                     setIsMuted(!isMuted);
                   }}
-                  className="text-white hover:text-[#f6c700] transition-colors cursor-pointer p-1"
+                  className="text-white hover:text-purple-400 transition-colors cursor-pointer p-1"
                   title={isMuted ? 'Unmute' : 'Mute'}
                 >
                   {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
@@ -494,7 +494,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                 <span className="px-2 py-0.5 rounded bg-white/10 text-[11px] font-bold text-slate-200">
                   {movie.language}
                 </span>
-                <span className="px-2 py-0.5 rounded bg-amber-400/20 border border-amber-400/80 text-amber-300 text-[10px] font-black tracking-wider flex items-center gap-1">
+                <span className="px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/80 text-purple-300 text-[10px] font-black tracking-wider flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span>{movie.quality === '4K' ? '4K ULTRA HD' : movie.quality}</span>
                 </span>
@@ -521,16 +521,16 @@ export const WatchPage: React.FC<WatchPageProps> = ({
             <button
               id="watch-player-play-btn"
               onClick={togglePlay}
-              className="group px-8 py-3.5 bg-[#f6c700] hover:bg-[#ffd700] active:scale-95 text-slate-950 font-bold text-sm sm:text-base rounded-md flex items-center justify-center gap-2.5 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all cursor-pointer min-w-[160px]"
+              className="group px-8 py-3.5 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 active:scale-95 text-white font-bold text-sm sm:text-base rounded-md flex items-center justify-center gap-2.5 shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 transition-all cursor-pointer min-w-[160px]"
             >
-              <Play className="w-4 h-4 fill-slate-950 text-slate-950 group-hover:scale-110 transition-transform" />
+              <Play className="w-4 h-4 fill-white text-white group-hover:scale-110 transition-transform" />
               <span>{isPlaying ? 'Pause Stream' : 'Watch Now'}</span>
             </button>
 
             <button
               id="watch-download-btn"
               onClick={handleDownload}
-              className="px-8 py-3.5 bg-[#081831] hover:bg-[#112a52] border border-white/15 text-slate-100 font-semibold text-sm sm:text-base rounded-md flex items-center justify-center gap-2 transition-all cursor-pointer min-w-[140px]"
+              className="px-8 py-3.5 bg-[#180d2f] hover:bg-[#28134d] border border-white/15 text-slate-100 font-semibold text-sm sm:text-base rounded-md flex items-center justify-center gap-2 transition-all cursor-pointer min-w-[140px]"
             >
               {isDownloaded ? (
                 <>
@@ -547,12 +547,12 @@ export const WatchPage: React.FC<WatchPageProps> = ({
           </div>
 
           {/* Real Time Release Highlight Pill */}
-          <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#081831] border border-amber-400/20 text-xs sm:text-sm">
-            <Clock className="w-4 h-4 text-[#f6c700]" />
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#160b2b] border border-purple-500/30 text-xs sm:text-sm">
+            <Clock className="w-4 h-4 text-purple-400" />
             <span className="text-slate-300">
               Specific Release Time:
             </span>
-            <span className="font-bold text-[#f6c700] font-mono">
+            <span className="font-bold text-purple-300 font-mono">
               {movie.releaseTime}
             </span>
             {movie.episodeReleaseTime && (
@@ -579,7 +579,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-2">
           {/* Movie Poster on Left Column */}
           <div className="lg:col-span-3">
-            <div className="aspect-[2/3] max-w-[240px] rounded-xl overflow-hidden bg-gradient-to-b from-[#0e2142] to-[#040e1e] border border-white/15 shadow-2xl relative group">
+            <div className="aspect-[2/3] max-w-[240px] rounded-xl overflow-hidden bg-gradient-to-b from-[#220f40] to-[#0d061a] border border-white/15 shadow-2xl relative group">
               <img
                 src={movie.posterUrl}
                 alt={movie.title}
@@ -604,16 +604,16 @@ export const WatchPage: React.FC<WatchPageProps> = ({
 
               {/* Badges: 4K Ultra HD, HDR10+, 60 FPS, Rating, Duration, Exact Release Time */}
               <div className="flex items-center flex-wrap gap-2.5 text-sm font-semibold text-slate-300 mb-4">
-                <span className="px-2.5 py-0.5 rounded bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 text-xs font-black tracking-wider shadow-sm">
+                <span className="px-2.5 py-0.5 rounded bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white text-xs font-black tracking-wider shadow-sm">
                   {movie.quality === '4K' ? '4K ULTRA HD' : movie.quality}
                 </span>
-                <span className="px-2 py-0.5 rounded bg-white/10 text-slate-200 text-xs font-bold border border-white/15">
+                <span className="px-2.5 py-0.5 rounded bg-white/10 text-slate-200 text-xs font-bold border border-white/15">
                   HDR10+
                 </span>
-                <span className="px-2 py-0.5 rounded bg-white/10 text-slate-200 text-xs font-bold border border-white/15">
+                <span className="px-2.5 py-0.5 rounded bg-white/10 text-slate-200 text-xs font-bold border border-white/15">
                   60 FPS
                 </span>
-                <div className="flex items-center gap-1 text-[#f6c700] ml-1">
+                <div className="flex items-center gap-1 text-purple-400 ml-1">
                   <span>★</span>
                   <span className="text-white">{movie.rating}</span>
                 </div>
@@ -621,8 +621,8 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                   {selectedEpisode ? `${selectedEpisode.duration} • ` : `${movie.duration} • `}
                   {formatVideoTime(totalDurationSeconds)}
                 </span>
-                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-mono">
-                  <Clock className="w-3 h-3" />
+                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-mono">
+                  <Clock className="w-3 h-3 text-purple-400" />
                   <span>{movie.releaseTime}</span>
                 </div>
               </div>
@@ -641,7 +641,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                 className={`px-5 py-2.5 rounded-lg border text-sm font-semibold flex items-center gap-2 transition-all cursor-pointer ${
                   isFavorite
                     ? 'bg-rose-500/20 border-rose-500 text-rose-300'
-                    : 'bg-[#081831] border-white/15 text-slate-200 hover:bg-[#112a52]'
+                    : 'bg-[#180d2f] border-white/15 text-slate-200 hover:bg-[#28134d]'
                 }`}
               >
                 <Heart className={`w-4 h-4 ${isFavorite ? 'fill-rose-500 text-rose-500' : ''}`} />
@@ -651,7 +651,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
               <button
                 id="watch-share-btn"
                 onClick={handleShare}
-                className="px-5 py-2.5 rounded-lg bg-[#081831] border border-white/15 hover:bg-[#112a52] text-sm font-semibold text-slate-200 flex items-center gap-2 transition-all cursor-pointer"
+                className="px-5 py-2.5 rounded-lg bg-[#180d2f] border border-white/15 hover:bg-[#28134d] text-sm font-semibold text-slate-200 flex items-center gap-2 transition-all cursor-pointer"
               >
                 {copiedShare ? (
                   <>
@@ -682,7 +682,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                   <span className="text-slate-400 font-bold uppercase tracking-wider block mb-1">
                     RELEASE TIME
                   </span>
-                  <span className="text-[#f6c700] font-semibold font-mono">
+                  <span className="text-purple-300 font-semibold font-mono">
                     {movie.releaseTime}
                   </span>
                 </div>
@@ -737,7 +737,7 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                     onSelectMovie(item);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="flex items-center gap-3 p-2 rounded-lg bg-[#081831]/60 hover:bg-[#112a52] border border-white/5 hover:border-white/15 transition-all cursor-pointer group"
+                  className="flex items-center gap-3 p-2 rounded-lg bg-[#160b2b]/70 hover:bg-[#261247] border border-white/5 hover:border-purple-500/20 transition-all cursor-pointer group"
                 >
                   <div className="w-14 h-20 rounded-md overflow-hidden bg-slate-800 flex-shrink-0 relative">
                     <img
@@ -748,14 +748,14 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-bold text-slate-100 truncate group-hover:text-[#f6c700] transition-colors">
+                    <h4 className="text-sm font-bold text-slate-100 truncate group-hover:text-purple-400 transition-colors">
                       {item.title}
                     </h4>
                     <p className="text-xs text-slate-400 mt-0.5">
                       {item.releaseYear} • {item.type}
                     </p>
                     <div className="flex items-center gap-2 mt-1.5 text-[11px]">
-                      <div className="flex items-center gap-1 text-[#f6c700]">
+                      <div className="flex items-center gap-1 text-purple-400">
                         <span>★</span>
                         <span>{item.rating}</span>
                       </div>

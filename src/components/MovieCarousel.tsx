@@ -49,14 +49,14 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={() => handleScroll('left')}
-            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#081831] hover:bg-[#122a50] border border-white/10 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#160b2b] hover:bg-[#27134d] border border-white/10 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer"
             aria-label="Previous titles"
           >
             <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button
             onClick={() => handleScroll('right')}
-            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#081831] hover:bg-[#122a50] border border-white/10 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#160b2b] hover:bg-[#27134d] border border-white/10 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer"
             aria-label="Next titles"
           >
             <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -78,7 +78,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({
               onClick={() => onSelectMovie(movie)}
             >
               {/* Poster Card Container */}
-              <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-gradient-to-b from-[#0e2142] to-[#040e1e] border border-white/10 group-hover:border-[#f6c700]/70 group-hover:shadow-2xl group-hover:shadow-amber-500/20 transition-all duration-300">
+              <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-gradient-to-b from-[#220f40] to-[#0d061a] border border-white/10 group-hover:border-purple-400 group-hover:shadow-2xl group-hover:shadow-purple-600/25 transition-all duration-300">
                 {/* Poster Image */}
                 <img
                   src={movie.posterUrl}
@@ -90,17 +90,17 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({
                 />
 
                 {/* Gradient Overlay on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#030d1d] via-[#030d1d]/20 to-transparent opacity-40 group-hover:opacity-75 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0617] via-[#0c0617]/20 to-transparent opacity-40 group-hover:opacity-75 transition-opacity" />
 
                 {/* Rating Badge (Top Left) */}
-                <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#030d1d]/80 backdrop-blur-md border border-white/10 flex items-center gap-1 text-[11px] font-bold text-slate-100 shadow">
-                  <span className="text-[#f6c700] text-xs">★</span>
+                <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#0c0617]/80 backdrop-blur-md border border-white/10 flex items-center gap-1 text-[11px] font-bold text-slate-100 shadow">
+                  <span className="text-purple-400 text-xs">★</span>
                   <span>{movie.rating}</span>
                 </div>
 
                 {/* 4K UHD Badge */}
                 {movie.quality === '4K' && (
-                  <div className="absolute top-2.5 right-11 px-1.5 py-0.5 rounded bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 font-black text-[9px] tracking-wider uppercase shadow-md flex items-center">
+                  <div className="absolute top-2.5 right-11 px-1.5 py-0.5 rounded bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-black text-[9px] tracking-wider uppercase shadow-md flex items-center">
                     <span>4K</span>
                   </div>
                 )}
@@ -114,7 +114,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({
                   className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full flex items-center justify-center backdrop-blur-md border transition-all ${
                     isFav
                       ? 'bg-rose-500/80 border-rose-400 text-white'
-                      : 'bg-[#030d1d]/60 border-white/10 text-slate-300 hover:text-white hover:bg-[#030d1d]/90 opacity-0 group-hover:opacity-100'
+                      : 'bg-[#0c0617]/60 border-white/10 text-slate-300 hover:text-white hover:bg-[#0c0617]/90 opacity-0 group-hover:opacity-100'
                   }`}
                   title={isFav ? 'Remove from favorites' : 'Add to favorites'}
                 >
@@ -123,14 +123,14 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({
 
                 {/* Play Button Icon on Hover */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="w-12 h-12 rounded-full bg-[#f6c700] text-slate-950 flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
-                    <Play className="w-5 h-5 fill-slate-950 ml-0.5" />
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white flex items-center justify-center shadow-lg shadow-purple-600/40 transform scale-90 group-hover:scale-100 transition-transform">
+                    <Play className="w-5 h-5 fill-white ml-0.5" />
                   </div>
                 </div>
 
                 {/* Optional Rank Number for Top 10 */}
                 {showRankNumber && (
-                  <div className="absolute -bottom-3 -left-2 text-6xl sm:text-7xl font-black text-[#f6c700]/90 font-['Bebas_Neue',sans-serif] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] pointer-events-none select-none">
+                  <div className="absolute -bottom-3 -left-2 text-6xl sm:text-7xl font-black text-purple-400/90 font-['Bebas_Neue',sans-serif] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] pointer-events-none select-none">
                     {index + 1}
                   </div>
                 )}
@@ -140,7 +140,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({
               <div className="mt-2.5 px-0.5">
                 <h3
                   title={movie.title}
-                  className="text-sm sm:text-base font-bold text-slate-100 truncate group-hover:text-[#f6c700] transition-colors"
+                  className="text-sm sm:text-base font-bold text-slate-100 truncate group-hover:text-purple-400 transition-colors"
                 >
                   {movie.title}
                 </h3>
@@ -148,7 +148,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({
                   <span>{movie.releaseYear} • {movie.type}</span>
                   <span className="text-slate-300 font-mono text-[11px] font-semibold">{movie.formattedRuntime || movie.duration}</span>
                 </div>
-                <div className="flex items-center gap-1 text-[11px] text-[#f6c700] font-mono mt-0.5">
+                <div className="flex items-center gap-1 text-[11px] text-purple-400 font-mono mt-0.5">
                   <Clock className="w-3 h-3 flex-shrink-0" />
                   <span className="truncate">{movie.releaseTime}</span>
                 </div>
