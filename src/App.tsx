@@ -70,6 +70,7 @@ export default function App() {
     return [
       MOVIES_DATA.find((m) => m.id === 'spiderman-brand-new-day')!,
       MOVIES_DATA.find((m) => m.id === 'the-odyssey')!,
+      MOVIES_DATA.find((m) => m.id === 'best-of-the-best')!,
       MOVIES_DATA.find((m) => m.id === 'coyote-vs-acme')!,
       MOVIES_DATA.find((m) => m.id === 'drawn-together')!,
       MOVIES_DATA.find((m) => m.id === 'mutiny')!,
@@ -92,6 +93,7 @@ export default function App() {
   const newReleases = useMemo(() => {
     return [
       MOVIES_DATA.find((m) => m.id === 'spiderman-brand-new-day')!,
+      MOVIES_DATA.find((m) => m.id === 'you-cant-leave')!,
       MOVIES_DATA.find((m) => m.id === 'the-odyssey')!,
       MOVIES_DATA.find((m) => m.id === 'coyote-vs-acme')!,
       MOVIES_DATA.find((m) => m.id === 'mutiny')!,
