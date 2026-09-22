@@ -1,6 +1,7 @@
 import { Movie, Genre } from '../types';
 import { allLoveIslandEpisodes } from './loveIslandEpisodes';
 import youMeBackdrop from '../assets/images/you_me_backdrop_1790007736034.jpg';
+import crewGirlBackdrop from '../assets/images/crew_girl_backdrop_1790036143251.jpg';
 
 export const GENRES_LIST: Genre[] = [
   'Action',
@@ -53,7 +54,7 @@ export const MOVIES_DATA: Movie[] = [
     tagline: 'Their love was forbidden. Together, they chose to fight.',
     overview:
       'Alma, an 18-year-old from an elite family secretly pursuing filmmaking, crosses paths with Vadim, an enigmatic student burdened by a turbulent past. When family expectations, dark secrets, and societal pressures collide, their fierce bond ignites an uncontrollable romance—standing together against everyone who tries to tear them apart.',
-    posterUrl: 'https://i.postimg.cc/cCDRWbfC/images.jpg',
+    posterUrl: 'https://i.postimg.cc/9MDbwYbQ/b-Ab-BNVplg7h79sm94Oy-He-Kk8Phz.webp',
     backdropUrl: youMeBackdrop,
     rating: 7.2,
     releaseYear: 2026,
@@ -72,6 +73,32 @@ export const MOVIES_DATA: Movie[] = [
     isTrendingToday: true,
     trendingRank: 2,
     featuredOrder: 2,
+  },
+  {
+    id: 'crew-girl',
+    title: 'Crew Girl',
+    tagline: 'One boat. Eight guys. One girl calling the shots.',
+    overview:
+      'When a family scandal derails 16-year-old rowing prodigy Teagan Tao’s future, she relocates to an elite East Coast prep school. Finding no girls’ crew team, Teagan steps up as coxswain to take charge of the notoriously chaotic boys’ varsity rowing squad, steering fierce rivalries, intense pressure, and unexpected romance toward a shot at the championship.',
+    posterUrl: 'https://i.postimg.cc/fyMtXwjV/AAAAQRItl-VCKszfp-QWHFbng49N58Ku0P5Gp4ut-ASPLTB2A7am0a1vyk-Vsgb2c-Gr-L1m2kz-NGd-AP-j9VAp-Td60Gq-TAHj.jpg',
+    backdropUrl: crewGirlBackdrop,
+    rating: 7.6,
+    releaseYear: 2026,
+    releaseDate: '2026-09-10',
+    releaseTime: '12:00 AM EST',
+    type: 'Movie',
+    genres: ['Drama', 'Romance'],
+    duration: '1h 48m',
+    runtimeSeconds: 6480,
+    formattedRuntime: '1:48:00',
+    quality: '4K',
+    status: 'Released',
+    language: 'EN',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    introVideoUrl: '/videos/universal_intro_3sec.mp4',
+    isTrendingToday: true,
+    trendingRank: 3,
+    featuredOrder: 3,
   },
   {
     id: 'mayday',

@@ -53,6 +53,7 @@ export default function App() {
   // Sections matching screenshots
   const top10ThisWeek = useMemo(() => {
     return [
+      MOVIES_DATA.find((m) => m.id === 'crew-girl') || MOVIES_DATA[2],
       MOVIES_DATA.find((m) => m.id === 'you-me-against-the-world') || MOVIES_DATA[1],
       MOVIES_DATA.find((m) => m.id === 'the-last') || MOVIES_DATA[16],
       MOVIES_DATA.find((m) => m.id === 'playtime-with-buddy') || MOVIES_DATA[17],
@@ -62,12 +63,12 @@ export default function App() {
       MOVIES_DATA.find((m) => m.id === 'moana-2') || MOVIES_DATA[2],
       MOVIES_DATA.find((m) => m.id === 'coyote-vs-acme') || MOVIES_DATA[6],
       MOVIES_DATA.find((m) => m.id === 'the-odyssey') || MOVIES_DATA[5],
-      MOVIES_DATA.find((m) => m.id === 'mutiny') || MOVIES_DATA[7],
     ].filter(Boolean) as Movie[];
   }, []);
 
   const popularMovies = useMemo(() => {
     return [
+      MOVIES_DATA.find((m) => m.id === 'crew-girl')!,
       MOVIES_DATA.find((m) => m.id === 'you-me-against-the-world')!,
       MOVIES_DATA.find((m) => m.id === 'spiderman-brand-new-day')!,
       MOVIES_DATA.find((m) => m.id === 'the-odyssey')!,
@@ -93,6 +94,7 @@ export default function App() {
 
   const newReleases = useMemo(() => {
     return [
+      MOVIES_DATA.find((m) => m.id === 'crew-girl')!,
       MOVIES_DATA.find((m) => m.id === 'you-me-against-the-world')!,
       MOVIES_DATA.find((m) => m.id === 'spiderman-brand-new-day')!,
       MOVIES_DATA.find((m) => m.id === 'you-cant-leave')!,
