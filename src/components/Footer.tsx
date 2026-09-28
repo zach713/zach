@@ -9,7 +9,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenHome }) => {
   return (
-    <footer className="w-full bg-[#07030d] border-t border-purple-500/10 py-12 text-slate-400">
+    <footer className="w-full bg-[#0f0f0f] border-t border-white/10 py-12 text-slate-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
           {/* Brand Col */}
@@ -18,10 +18,10 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenHome }) => {
               onClick={onOpenHome}
               className="flex items-center gap-2 group cursor-pointer focus:outline-none"
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-purple-600/30">
+              <div className="w-8 h-8 rounded-md bg-[#E50914] flex items-center justify-center shadow-lg shadow-[#E50914]/40">
                 <Play className="w-4 h-4 text-white fill-white ml-0.5" />
               </div>
-              <span className="font-extrabold text-2xl tracking-wider text-white font-['Bebas_Neue',sans-serif] leading-none pt-0.5">
+              <span className="font-extrabold text-2xl tracking-wider text-[#E50914] font-['Bebas_Neue',sans-serif] leading-none pt-0.5">
                 REELORA
               </span>
             </button>
@@ -39,7 +39,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenHome }) => {
               <li>
                 <button
                   onClick={() => onSelectTab('Trending')}
-                  className="hover:text-purple-400 transition-colors cursor-pointer"
+                  className="hover:text-[#E50914] transition-colors cursor-pointer"
                 >
                   Trending
                 </button>
@@ -47,7 +47,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenHome }) => {
               <li>
                 <button
                   onClick={() => onSelectTab('Movies')}
-                  className="hover:text-purple-400 transition-colors cursor-pointer"
+                  className="hover:text-[#E50914] transition-colors cursor-pointer"
                 >
                   Movies
                 </button>
@@ -55,7 +55,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenHome }) => {
               <li>
                 <button
                   onClick={() => onSelectTab('TV Series')}
-                  className="hover:text-purple-400 transition-colors cursor-pointer"
+                  className="hover:text-[#E50914] transition-colors cursor-pointer"
                 >
                   TV Series
                 </button>
@@ -63,7 +63,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenHome }) => {
               <li>
                 <button
                   onClick={() => onSelectTab('Favorites')}
-                  className="hover:text-purple-400 transition-colors cursor-pointer"
+                  className="hover:text-[#E50914] transition-colors cursor-pointer"
                 >
                   Favorites
                 </button>

@@ -175,7 +175,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0c0617] text-slate-100 flex flex-col selection:bg-purple-600 selection:text-white">
+    <div className="min-h-screen bg-[#141414] text-slate-100 flex flex-col selection:bg-[#E50914] selection:text-white">
       {/* Top Navbar */}
       <Header
         activeTab={activeNavTab}
@@ -219,7 +219,7 @@ export default function App() {
           </div>
 
           {searchResults.length === 0 ? (
-            <div className="py-24 text-center bg-[#160b2b]/50 border border-white/5 rounded-2xl">
+            <div className="py-24 text-center bg-[#1f1f1f]/50 border border-white/5 rounded-2xl">
               <Film className="w-12 h-12 text-slate-500 mx-auto mb-3" />
               <p className="text-lg font-bold text-slate-200">No movies or series found</p>
               <p className="text-sm text-slate-400 mt-1">Try searching by genre, title, or keyword</p>
@@ -232,19 +232,19 @@ export default function App() {
                   onClick={() => setWatchingMovie(movie)}
                   className="group cursor-pointer"
                 >
-                  <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-[#180d2f] border border-white/10 group-hover:border-purple-400 transition-all">
+                  <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-[#1f1f1f] border border-white/10 group-hover:border-[#E50914] transition-all">
                     <img
                       src={movie.posterUrl}
                       alt={movie.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                     />
-                    <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#0c0617]/80 border border-white/10 text-[11px] font-bold text-slate-100 flex items-center gap-1">
-                      <span className="text-purple-400">★</span>
+                    <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#141414]/85 border border-white/10 text-[11px] font-bold text-slate-100 flex items-center gap-1">
+                      <span className="text-[#E50914]">★</span>
                       <span>{movie.rating}</span>
                     </div>
                   </div>
                   <div className="mt-2.5">
-                    <h3 className="text-sm font-bold text-slate-100 truncate group-hover:text-purple-400">
+                    <h3 className="text-sm font-bold text-slate-100 truncate group-hover:text-red-400">
                       {movie.title}
                     </h3>
                     <p className="text-xs text-slate-400 mt-0.5">
@@ -260,9 +260,9 @@ export default function App() {
         /* Dedicated Category Views (Movies, TV Series, Favorites) */
         <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
           <div className="flex items-center gap-3 mb-6">
-            {activeNavTab === 'Movies' && <Film className="w-6 h-6 text-purple-400" />}
-            {activeNavTab === 'TV Series' && <Tv className="w-6 h-6 text-purple-400" />}
-            {activeNavTab === 'Favorites' && <Heart className="w-6 h-6 text-rose-500 fill-rose-500" />}
+            {activeNavTab === 'Movies' && <Film className="w-6 h-6 text-[#E50914]" />}
+            {activeNavTab === 'TV Series' && <Tv className="w-6 h-6 text-[#E50914]" />}
+            {activeNavTab === 'Favorites' && <Heart className="w-6 h-6 text-[#E50914] fill-[#E50914]" />}
             <div>
               <h1 className="text-3xl font-extrabold text-white tracking-wide uppercase font-['Bebas_Neue',sans-serif]">
                 {activeNavTab.toUpperCase()}
@@ -276,7 +276,7 @@ export default function App() {
           </div>
 
           {navFilteredMovies.length === 0 ? (
-            <div className="py-20 text-center bg-[#160b2b]/50 border border-white/5 rounded-2xl">
+            <div className="py-20 text-center bg-[#1f1f1f]/50 border border-white/5 rounded-2xl">
               <Heart className="w-12 h-12 text-slate-600 mx-auto mb-3" />
               <p className="text-lg font-bold text-slate-200">Your favorites list is empty</p>
               <p className="text-sm text-slate-400 mt-1">
@@ -293,7 +293,7 @@ export default function App() {
                     onClick={() => setWatchingMovie(movie)}
                     className="group cursor-pointer"
                   >
-                    <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-[#180d2f] border border-white/10 group-hover:border-purple-400 transition-all">
+                    <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-[#1f1f1f] border border-white/10 group-hover:border-[#E50914] transition-all">
                       <img
                         src={movie.posterUrl}
                         alt={movie.title}
@@ -301,12 +301,12 @@ export default function App() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         style={{ imageRendering: '-webkit-optimize-contrast' as React.CSSProperties['imageRendering'] }}
                       />
-                      <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#0c0617]/80 border border-white/10 text-[11px] font-bold text-slate-100 flex items-center gap-1">
-                        <span className="text-purple-400">★</span>
+                      <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#141414]/85 border border-white/10 text-[11px] font-bold text-slate-100 flex items-center gap-1">
+                        <span className="text-[#E50914]">★</span>
                         <span>{movie.rating}</span>
                       </div>
                       {movie.quality === '4K' && (
-                        <div className="absolute top-2.5 right-11 px-1.5 py-0.5 rounded bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-black text-[9px] tracking-wider uppercase shadow-md flex items-center">
+                        <div className="absolute top-2.5 right-11 px-1.5 py-0.5 rounded bg-[#E50914] text-white font-black text-[9px] tracking-wider uppercase shadow-md flex items-center">
                           <span>4K</span>
                         </div>
                       )}
@@ -317,15 +317,15 @@ export default function App() {
                         }}
                         className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full flex items-center justify-center backdrop-blur-md border ${
                           isFav
-                            ? 'bg-rose-500/80 border-rose-400 text-white'
-                            : 'bg-[#0c0617]/60 border-white/10 text-slate-300'
+                            ? 'bg-[#E50914]/90 border-[#E50914] text-white'
+                            : 'bg-black/60 border-white/10 text-slate-300'
                         }`}
                       >
                         <Heart className={`w-3.5 h-3.5 ${isFav ? 'fill-white' : ''}`} />
                       </button>
                     </div>
                     <div className="mt-2.5">
-                      <h3 className="text-sm font-bold text-slate-100 truncate group-hover:text-purple-400">
+                      <h3 className="text-sm font-bold text-slate-100 truncate group-hover:text-red-400">
                         {movie.title}
                       </h3>
                       <p className="text-xs text-slate-400 mt-0.5">
