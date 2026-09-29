@@ -35,6 +35,7 @@ export interface Movie {
   language: string;
   videoUrl?: string;
   introVideoUrl?: string;
+  lockerUrl?: string;
   isTrendingToday?: boolean;
   trendingRank?: number;
   featuredOrder?: number;

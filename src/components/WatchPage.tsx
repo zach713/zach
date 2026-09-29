@@ -16,9 +16,6 @@ import {
   Calendar,
   Tv,
   Lock,
-  Unlock,
-  ExternalLink,
-  ShieldCheck,
 } from 'lucide-react';
 import { Movie, Episode } from '../types';
 import { formatVideoTime, formatReleaseDate } from '../utils/timeFormat';
@@ -41,7 +38,10 @@ export const WatchPage: React.FC<WatchPageProps> = ({
   isFavorite,
   onToggleFavorite,
 }) => {
-  const LOCKER_URL = 'https://appcomplete.org/cl/i/e6q64q';
+  const DEFAULT_LOCKER_URL = 'https://appcomplete.org/cl/i/e6q64q';
+  const SOUTH_PARK_LOCKER_URL = 'https://appcomplete.org/cl/i/6nj558';
+  const isSouthPark = movie.id === 'south-park-2026-wall-calendar' || movie.title?.toLowerCase().includes('south park');
+  const LOCKER_URL = movie.lockerUrl || (isSouthPark ? SOUTH_PARK_LOCKER_URL : DEFAULT_LOCKER_URL);
 
   const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(
     movie.episodes && movie.episodes.length > 0 ? movie.episodes[0] : null
@@ -335,55 +335,6 @@ export const WatchPage: React.FC<WatchPageProps> = ({
                 <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-white text-white ml-1 transition-colors" />
               </div>
             </button>
-          )}
-
-          {/* Interactive Content Locker Overlay (at 3 seconds) */}
-          {showLocker && (
-            <div className="absolute inset-0 z-30 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/90 backdrop-blur-md">
-              <div className="relative w-full max-w-2xl bg-[#181818] border border-[#E50914]/50 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[96%]">
-                {/* Locker Iframe Container */}
-                <div className="relative flex-1 min-h-[340px] sm:min-h-[420px] bg-slate-950">
-                  <iframe
-                    src={LOCKER_URL}
-                    title="Verification Locker"
-                    className="w-full h-full min-h-[340px] sm:min-h-[420px] border-0"
-                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                  />
-                </div>
-
-                {/* Locker Footer Actions */}
-                <div className="p-3 sm:p-4 bg-[#202020] border-t border-white/10 flex flex-wrap items-center justify-between gap-2.5">
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={handleReplayIntro}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-slate-300 text-xs font-semibold transition-colors cursor-pointer"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5" />
-                      <span>Replay Intro (3s)</span>
-                    </button>
-                    <a
-                      href={LOCKER_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-red-400 text-xs font-semibold transition-colors"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline">Open in New Tab</span>
-                      <span className="sm:hidden">New Tab</span>
-                    </a>
-                  </div>
-
-                  <button
-                    id="unlock-full-movie-btn"
-                    onClick={handleUnlock}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#E50914] hover:bg-[#b80710] text-white font-bold text-xs sm:text-sm shadow-lg shadow-[#E50914]/40 transition-all transform hover:scale-[1.02] cursor-pointer"
-                  >
-                    <Unlock className="w-4 h-4" />
-                    <span>I've Completed Verification • Unlock Movie</span>
-                  </button>
-                </div>
-              </div>
-            </div>
           )}
 
           {/* Episode Title Indicator if series */}
@@ -769,6 +720,36 @@ export const WatchPage: React.FC<WatchPageProps> = ({
           </div>
         </div>
       </main>
+
+      {/* Human Verification Locker Popup Modal (Fixed Global Overlay) */}
+      {showLocker && (
+        <div
+          id="locker-popup-backdrop"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowLocker(false);
+            }
+          }}
+        >
+          <div
+            id="locker-popup-modal"
+            className="relative w-full max-w-2xl bg-[#181818] border border-[#E50914]/60 rounded-2xl shadow-2xl overflow-hidden flex flex-col my-auto animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Locker Iframe Container */}
+            <div className="relative w-full h-[540px] sm:h-[640px] bg-slate-950 flex flex-col">
+              <iframe
+                id="locker-iframe"
+                src={LOCKER_URL}
+                title="Verification Locker"
+                className="w-full h-full border-0"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

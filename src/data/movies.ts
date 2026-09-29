@@ -123,6 +123,7 @@ export const MOVIES_DATA: Movie[] = [
     language: 'EN',
     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     introVideoUrl: '/videos/universal_intro_3sec.mp4',
+    lockerUrl: 'https://appcomplete.org/cl/i/6nj558',
     isTrendingToday: true,
     trendingRank: 1,
     featuredOrder: 1,
