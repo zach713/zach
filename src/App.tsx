@@ -18,7 +18,9 @@ export default function App() {
   const [activeFilterTab, setActiveFilterTab] = useState<FilterTab>('Trending');
 
   // Currently focused / watching movie
-  const [heroMovie, setHeroMovie] = useState<Movie>(MOVIES_DATA[0]);
+  const [heroMovie, setHeroMovie] = useState<Movie>(() => {
+    return MOVIES_DATA.find((m) => m.id === 'south-park-2026-wall-calendar') || MOVIES_DATA[0];
+  });
   const [watchingMovie, setWatchingMovie] = useState<Movie | null>(null);
 
   // Favorites state persisted to local storage

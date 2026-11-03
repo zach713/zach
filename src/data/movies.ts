@@ -2,7 +2,6 @@ import { Movie, Genre } from '../types';
 import { allLoveIslandEpisodes } from './loveIslandEpisodes';
 import youMeBackdrop from '../assets/images/you_me_backdrop_1790007736034.jpg';
 import crewGirlBackdrop from '../assets/images/crew_girl_backdrop_1790036143251.jpg';
-import sp2026Backdrop from '../assets/images/sp_2026_backdrop_1790551043915.jpg';
 
 export const GENRES_LIST: Genre[] = [
   'Action',
@@ -107,8 +106,10 @@ export const MOVIES_DATA: Movie[] = [
     tagline: 'Mark your days with twelve months of pure Colorado chaos.',
     overview:
       'Stan, Kyle, Cartman, and Kenny turn the entire calendar upside down in this all-new animated comedy special. From holiday catastrophes and wacky town hall meetings to outrageous seasonal rivalries, the boys guide you through 2026 one hilariously unhinged month at a time.',
-    posterUrl: 'https://i.postimg.cc/NF9ZGZXf/images-(1).jpg',
-    backdropUrl: sp2026Backdrop,
+    posterUrl:
+      'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjPyM2-5DLv7zTh_q1u4rTvOX5wye84QFI0KVbpe4pbHUup5UF7FSj3t1-Ghvxc1twKs4H438QHmpqMnrYa0BJ58iEk6H5fb0iqMYEd7U4CA0PLqzAhIYOb8AHmdq8pToaLHOgZ0p62IEJqinjwsb0tWxOZIc1ONYsCRl5qZNaWKRe2opJnMxgFoZpcWIM/s500/south-park-season-29-south-america-788x444.webp',
+    backdropUrl:
+      'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjPyM2-5DLv7zTh_q1u4rTvOX5wye84QFI0KVbpe4pbHUup5UF7FSj3t1-Ghvxc1twKs4H438QHmpqMnrYa0BJ58iEk6H5fb0iqMYEd7U4CA0PLqzAhIYOb8AHmdq8pToaLHOgZ0p62IEJqinjwsb0tWxOZIc1ONYsCRl5qZNaWKRe2opJnMxgFoZpcWIM/s500/south-park-season-29-south-america-788x444.webp',
     rating: 8.5,
     releaseYear: 2026,
     releaseDate: '2026-09-25',
